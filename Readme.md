@@ -3,30 +3,32 @@
 
   modern &lt;select&gt;. (WIP)
 
-
-    select
-    .label('Select a language')
-    .multiple()
-    .add('Javascript')
-    .add('Google Go')
-    .add('Bash')
-    .add('Ruby')
-    .add('Lua')
-    .add('C++')
-    .add('C', 200)
-    .select('Jasvascript')
-    .select('Google Go')
-    .deselect('Google Go');
-    .select('c')
-
-    document.body.appendChild(select.el);
-
-    select.on('select', function(){
-      console.log(select.values());
-      // => ['javascript', 200]
-    });
-
   [![select](https://i.cloudup.com/j1xDWsU3FM.gif)](https://cloudup.com/cg4UdfFX5js)
+
+```js
+select
+  .label('Select a language')
+  .multiple()
+  .add('Javascript')
+  .add('Google Go')
+  .add('Bash')
+  .add('Ruby')
+  .add('Lua')
+  .add('C++')
+  .add('C', 200)
+  .select('Jasvascript')
+  .select('Google Go')
+  .deselect('Google Go');
+  .select('c');
+
+document.body.appendChild(select.el);
+
+select.on('change', function(){
+  console.log(select.values());
+  // => ['javascript', 200]
+});
+```
+
 
 ## Installation
 
