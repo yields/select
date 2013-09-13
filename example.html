@@ -65,43 +65,50 @@
   <script>
     var select = require('select');
 
-    append(select())
-    .label('Select languages...')
-    .multiple()
-    .add('Javascript')
-    .add('Google Go')
-    .add('Bash')
-    .add('Ruby')
-    .add('Lua')
-    .add('C++')
-    .add('C');
+    var one = append(select())
+      .label('Select languages...')
+      .multiple()
+      .add('Javascript')
+      .add('Google Go')
+      .add('Bash')
+      .add('Ruby')
+      .add('Lua')
+      .add('C++')
+      .add('C');
 
-    append(select())
-    .label('Select a language...')
-    .add('Javascript')
-    .add('Google Go')
-    .add('Bash')
-    .add('Ruby')
-    .add('Lua')
-    .add('C++')
-    .add('C');
+    var two = append(select())
+      .label('Select a language...')
+      .add('Javascript')
+      .add('Google Go')
+      .add('Bash')
+      .add('Ruby')
+      .add('Lua')
+      .add('C++')
+      .add('C');
 
-    append(select())
-    .label('Search a language...')
-    .searchable()
-    .add('Javascript')
-    .add('Google Go')
-    .add('Bash')
-    .add('Ruby')
-    .add('Lua')
-    .add('C++')
-    .add('C');
+    var three = append(select())
+      .label('Search a language...')
+      .searchable()
+      .add('Javascript')
+      .add('Google Go')
+      .add('Bash')
+      .add('Ruby')
+      .add('Lua')
+      .add('C++')
+      .add('C');
 
 
     function append(s){
       document.body.appendChild(s.el);
       return s;
     }
+
+    [one, two, three].forEach(function(select){
+      select.on('change', function(){
+        console.log('change: %O', select.el);
+        console.log('values: %O', select.values());
+      });
+    });
   </script>
 </body>
 </html>

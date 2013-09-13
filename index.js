@@ -95,7 +95,6 @@ Select.prototype.multiple = function(label, opts){
   el.placeholder = label;
   el.type = 'search';
   el.incremental = true;
-  el.onblur = this.hide.bind(this);
   var box = query('.select-box', this.el);
   box.innerHTML = '';
   box.appendChild(el);
@@ -121,9 +120,11 @@ Select.prototype.searchable = function(label){
   el.type = 'search';
   el.incremental = true;
   el.placeholder = label;
-  el.onblur = this.hide.bind(this);
   this.dropdown.insertBefore(el, this.opts);
-  this.on('show', el.focus.bind(el));
+  this.on('show', function(){
+    el.focus();
+    el.value = '';
+  });
   return this;
 };
 
@@ -156,14 +157,19 @@ Select.prototype.select = function(name){
   var opt = this.get(name);
   this.classes.add('selected');
 
+  // select
+  this.emit('select', opt);
+  opt.selected = true;
+
   // hide
-  opt.setAttribute('hidden', '');
-  classes(opt).add('selected');
+  opt.el.setAttribute('hidden', '');
+  classes(opt.el).add('selected');
+  opt.selected = true;
 
   // multiple
   if (this._multiple) {
     this.box.add(name);
-    this._selected = this.box.values();
+    this._selected.push(opt);
     this.emit('select', opt);
     this.box.input.value = '';
     this.change();
@@ -171,12 +177,12 @@ Select.prototype.select = function(name){
     return this;
   }
 
+  // single
   var prev = this._selected[0];
-  if (prev) this.deselect(prev);
-  this._selected = [name];
+  if (prev) this.deselect(prev.name);
+  this._selected = [opt];
   this.label(name);
   this.hide();
-  this.emit('select', opt);
   this.change();
 };
 
@@ -190,20 +196,25 @@ Select.prototype.select = function(name){
 
 Select.prototype.deselect = function(name){
   var opt = this.get(name);
+
+  // deselect
   this.emit('deselect', opt);
+  opt.selected = false;
 
   // show
-  opt.removeAttribute('hidden');
-  classes(opt).remove('selected');
+  opt.el.removeAttribute('hidden');
+  classes(opt.el).remove('selected');
 
   // multiple
   if (this._multiple) {
     this.box.remove(name);
-    this._selected = this.box.values();
+    var i = this._selected.indexOf(opt);
+    this._selected.splice(i, 1);
     this.change();
     return this;
   }
 
+  // single
   this.label(this._label);
   this._selected = [];
   this.change();
@@ -223,10 +234,10 @@ Select.prototype.get = function(name){
     var i = this.indexOf(name);
     var opt = this.options[i];
     if (!opt) throw new Error('option "' + name + '" does not exist');
-    return opt.el;
+    return opt;
   }
 
-  return this.dropdown;
+  return { el: this.dropdown };
 };
 
 /**
@@ -238,8 +249,10 @@ Select.prototype.get = function(name){
  */
 
 Select.prototype.show = function(name){
-  var el = this.get(name);
-  el.removeAttribute('hidden');
+  var opt = this.get(name);
+
+  // show
+  opt.el.removeAttribute('hidden');
 
   // focus
   if (!this._multiple && !this._searchable) {
@@ -263,8 +276,8 @@ Select.prototype.show = function(name){
  */
 
 Select.prototype.hide = function(name){
-  var el = this.get(name);
-  el.setAttribute('hidden', '');
+  var opt = this.get(name);
+  opt.el.setAttribute('hidden', '');
   if (name) return this;
   this.emit('hide');
   this.classes.remove('opened');
@@ -280,7 +293,7 @@ Select.prototype.hide = function(name){
  */
 
 Select.prototype.visible = function(name){
-  return ! this.get(name).hasAttribute('hidden');
+  return ! this.get(name).el.hasAttribute('hidden');
 };
 
 /**
@@ -535,7 +548,7 @@ function option(obj, value, el){
   obj.el = obj.el || document.createElement('li');
   classes(obj.el).add('select-option');
   classes(obj.el).add('show');
-  obj.value = obj.value;
+  obj.value = obj.value || obj.name.toLowerCase();
   obj.el.textContent = obj.name;
   obj.name = obj.name.toLowerCase();
   return obj;
