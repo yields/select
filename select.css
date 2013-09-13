@@ -1,0 +1,63 @@
+
+.select {
+  position: relative;
+  display: inline-block;
+  -webkit-user-select: none;
+  user-select: none;
+  min-width: 150px;
+}
+
+.select.selected .select-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.select .select-option[disabled] {
+  opacity: .6;
+  pointer-events: none;
+}
+
+.select .select-box {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 4px 0;
+}
+
+.select .select-box {
+  cursor: pointer;
+}
+
+.select .select-label {
+  padding: 0 8px;
+  color: #aaa;
+}
+
+.select .select-option {
+  cursor: pointer;
+  display: block;
+  padding: 3px 4px;
+}
+
+.select .select-options {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.select:focus {
+  outline: 0;
+}
+
+.select .select-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  background: #fff;
+  z-index: 1;
+  border: 1px solid #ddd;
+}
+
+.select .selected {
+  display: none;
+}

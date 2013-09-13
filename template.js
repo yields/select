@@ -1,0 +1,1 @@
+module.exports = '<div class=\'select\' tabindex=\'-1\'>\n  <div class=\'select-box\'>\n    <span class=\'select-label\'></span>\n  </div>\n  <div class=\'select-dropdown\' hidden>\n    <ul class=\'select-options\'></ul>\n  </div>\n</div>\n';
