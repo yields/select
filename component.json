@@ -18,5 +18,11 @@
     "component/events": "*",
     "component/domify": "*",
     "component/query": "*"
+  },
+  "development": {
+    "visionmedia/mocha-matrix": "*",
+    "visionmedia/mocha": "*",
+    "component/assert": "*",
+    "component/dom": "*"
   }
 }

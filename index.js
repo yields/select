@@ -155,7 +155,11 @@ Select.prototype.add = function(name, value){
 
 Select.prototype.select = function(name){
   var opt = this.get(name);
-  this.classes.add('selected');
+
+  // state
+  if (!this.classes.has('selected')) {
+    this.classes.add('selected');
+  }
 
   // select
   this.emit('select', opt);
@@ -169,7 +173,6 @@ Select.prototype.select = function(name){
   if (this._multiple) {
     this.box.add(name);
     this._selected.push(opt);
-    this.emit('select', opt);
     this.box.input.value = '';
     this.change();
     this.hide();
@@ -183,6 +186,7 @@ Select.prototype.select = function(name){
   this.label(name);
   this.hide();
   this.change();
+  return this;
 };
 
 /**
@@ -208,6 +212,7 @@ Select.prototype.deselect = function(name){
   if (this._multiple) {
     this.box.remove(name);
     var i = this._selected.indexOf(opt);
+    if (!~i) return this;
     this._selected.splice(i, 1);
     this.change();
     return this;
@@ -320,7 +325,7 @@ Select.prototype.toggle = function(name){
  */
 
 Select.prototype.disable = function(name){
-  this.get(name).setAttribute('disabled', true);
+  this.get(name).el.setAttribute('disabled', true);
   return this;
 };
 
@@ -333,7 +338,7 @@ Select.prototype.disable = function(name){
  */
 
 Select.prototype.enable = function(name){
-  this.get(name).removeAttribute('disabled');
+  this.get(name).el.removeAttribute('disabled');
   return this;
 };
 
