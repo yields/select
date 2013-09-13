@@ -164,6 +164,12 @@ the method `.search(term)` will do nothing.
 
 Emitted after a search was performed with number of matches.
 
+### Tests
+
+```bash
+$ make test
+```
+
 ## License
 
   MIT
