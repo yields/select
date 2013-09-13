@@ -348,7 +348,7 @@ Select.prototype.enable = function(name){
 
 Select.prototype.selected = function(arr){
   if (1 == arguments.length) {
-    arr.forEach(this.select.bind(this));
+    arr.forEach(this.select, this);
     return this;
   }
 
