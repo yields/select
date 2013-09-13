@@ -1,4 +1,3 @@
-
 # select
 
   modern &lt;select&gt;. (WIP)
@@ -111,7 +110,7 @@ select = select()
   .add('two')
   .on('search', function(term){
     ajax(term, function(opts){
-      opts.forEach(select.add.bind(select))
+      opts.forEach(select.add, select)
     })
   });
 ```
