@@ -164,7 +164,6 @@ Select.prototype.select = function(name){
   // hide
   opt.el.setAttribute('hidden', '');
   classes(opt.el).add('selected');
-  opt.selected = true;
 
   // multiple
   if (this._multiple) {
