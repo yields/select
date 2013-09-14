@@ -57,6 +57,10 @@ Allow search.
 
 Add an option with `name` and optional `value`.
 
+#### remove(name)
+
+Remove an option with `name`.
+
 #### select(name)
 
 Select an option with `name`.
@@ -127,7 +131,12 @@ Emitted when you add an `option` with an object:
       name: <lowercase option name>
       value: <the option value>
       el: <the element>
+      selected: <true if the option is selected>
     }
+
+#### "remove"
+
+Emitted when an option is removed, `option` object is given as an argument.
 
 #### "select"
 
@@ -137,6 +146,7 @@ Emitted when an option is selected.
       name: <lowercase option name>
       value: <the option value>
       el: <the element>
+      selected: <true if the option is selected>
     }
 
 #### "change"

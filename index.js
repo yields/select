@@ -134,6 +134,39 @@ Select.prototype.add = function(name, value){
 };
 
 /**
+ * Remove an option with `name`.
+ *
+ * @param {String} name
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.remove = function(name){
+  var name = name.toLowerCase()
+    , opts = this.options
+    , len = opts.length
+    , j;
+
+  for (var i = 0; i < len; ++i) {
+    if (name == opts[i].name) {
+      this.emit('remove', opts[i]);
+      this.opts.removeChild(opts[i].el);
+
+      // selected
+      if (opts[i].selected) {
+        j = this._selected.indexOf(opts[0]);
+        this._selected.splice(j, 1);
+      }
+
+      opts.splice(i, 1);
+      break;
+    }
+  }
+
+  return this;
+};
+
+/**
  * Select `name`.
  *
  * @param {String} name

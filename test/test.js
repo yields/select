@@ -73,6 +73,35 @@ describe('select()', function(){
     })
   })
 
+  describe('.remove(name)', function(){
+    var s = select();
+
+    it('should remove it from .options', function(){
+      s.add('a');
+      assert(1 == s.options.length);
+      s.remove('a');
+      assert(0 == s.options.length);
+    })
+
+    it('should remove it from ._selected if its selected', function(){
+      s.add('a')
+      assert(1 == s.options.length);
+      s.select('a');
+      assert(1 == s.selected().length);
+      s.remove('a');
+      assert(0 == s.options.length);
+      assert(0 == s.selected().length);
+    })
+
+    it('should emit `remove` with the option', function(){
+      var opt;
+      s.add('a');
+      s.on('remove', function(o){ opt = o; });
+      s.remove('a');
+      assert('a' == opt.name);
+    })
+  })
+
   describe('.get', function(){
     describe('(name)', function(){
       it('should get an option', function(){
