@@ -2,7 +2,7 @@
   "name": "select",
   "repo": "yields/select",
   "description": "modern <select>.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": ["select", "chosen", "select2"],
   "license": "MIT",
   "main": "index.js",

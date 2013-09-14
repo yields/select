@@ -1,4 +1,11 @@
 
+0.0.3 / 2013-09-14
+==================
+
+ * add .remove(name)
+ * add search tests
+ * add search input helper
+
 0.0.2 / 2013-09-13
 ==================
 
