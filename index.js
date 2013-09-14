@@ -90,11 +90,7 @@ Select.prototype.label = function(label){
 Select.prototype.multiple = function(label, opts){
   if (this._multiple) return;
   this._multiple = true;
-  var el = document.createElement('input');
-  label = label || this._label;
-  el.placeholder = label;
-  el.type = 'search';
-  el.incremental = true;
+  var el = search(this, label);
   var box = query('.select-box', this.el);
   box.innerHTML = '';
   box.appendChild(el);
@@ -115,16 +111,8 @@ Select.prototype.multiple = function(label, opts){
 Select.prototype.searchable = function(label){
   if (this._searchable) return this;
   this._searchable = true;
-  var el = document.createElement('input');
-  label = label || this._label;
-  el.type = 'search';
-  el.incremental = true;
-  el.placeholder = label;
+  var el = search(this, label);
   this.dropdown.insertBefore(el, this.opts);
-  this.on('show', function(){
-    el.focus();
-    el.value = '';
-  });
   return this;
 };
 
@@ -556,4 +544,45 @@ function option(obj, value, el){
   obj.el.textContent = obj.name;
   obj.name = obj.name.toLowerCase();
   return obj;
+}
+
+/**
+ * Get a search input.
+ *
+ * @param {Select} select
+ * @param {String} label
+ * @return {Element}
+ * @api private
+ */
+
+function search(select, label){
+  var el = document.createElement('input');
+  label = label || select._label;
+  el.type = 'search';
+  el.placeholder = label;
+  el.incremental = true;
+
+  // blur
+  el.onblur = function(){
+    setTimeout(function(){
+      select.hide();
+    }, 50);
+  };
+
+  // show
+  select.on('show', function(){
+    el.focus();
+    el.value = '';
+  });
+
+  // hide
+  select.on('hide', function(){
+    el.value = '';
+    var els = query.all('[hidden]:not(.selected)', select.opts);
+    for (var i = 0; i < els.length; ++i) {
+      els[i].removeAttribute('hidden');
+    }
+  });
+
+  return el;
 }
