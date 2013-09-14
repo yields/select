@@ -302,4 +302,68 @@ describe('select()', function(){
       })
     })
   })
+
+  describe('.values()', function(){
+    describe('when something is selected', function(){
+      describe('when single', function(){
+        it('should return an array with a single value', function(){
+          assert(1 == select()
+            .add('one', 1)
+            .add('two', 2)
+            .select('two')
+            .select('one')
+            .values()[0])
+        })
+      })
+
+      describe('when multiple', function(){
+        it('should return an array with selected values', function(){
+          var vals = select()
+            .multiple()
+            .add('Go', 'golang')
+            .add('Lua')
+            .add('JS')
+            .select('go')
+            .select('lua')
+            .values();
+
+          assert('golang' == vals[0]);
+          assert('lua' == vals[1]);
+        })
+      })
+    })
+
+    describe('when nothing is selected', function(){
+      it('should return an empty array', function(){
+        assert(0 == select().values());
+      })
+    })
+  })
+
+  describe('.search(term)', function(){
+    describe('when there are no listeners to `search`', function(){
+      it('should work', function(){
+        var opts = select()
+          .add('one')
+          .add('two')
+          .add('three')
+          .search('o')
+          .opts;
+
+        assert(2 == dom('.select-option:not([hidden])', opts).length());
+      })
+    })
+
+    describe('when there are listeners to `search` it shouldnt work', function(){
+      var opts = select()
+        .add('one')
+        .add('two')
+        .add('three')
+        .on('search', function(){})
+        .search('o')
+        .opts;
+
+      assert(3 == dom('.select-option:not([hidden])', opts).length());
+    })
+  })
 })

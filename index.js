@@ -378,7 +378,9 @@ Select.prototype.search = function(term){
 
   // custom search
   this.emit('search', term, opts);
-  if (this.hasListeners('search')) return;
+
+  // abort
+  if (this.hasListeners('search')) return this;
 
   // search
   for (var i = 0; i < len; ++i) {
@@ -392,9 +394,7 @@ Select.prototype.search = function(term){
   }
 
   // all done
-  this.emit('found', found);
-
-  return this;
+  return this.emit('found', found);
 };
 
 
