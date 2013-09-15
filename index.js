@@ -6,6 +6,7 @@
 var template = require('./template')
   , prev = require('previous-sibling')
   , next = require('next-sibling')
+  , throttle = require('throttle')
   , Pillbox = require('pillbox')
   , classes = require('classes')
   , Emitter = require('emitter')
@@ -53,14 +54,12 @@ Emitter(Select.prototype);
  */
 
 Select.prototype.bind = function(){
-  this.events.bind('click .select-label', 'toggle');
   this.events.bind('click .select-box', 'toggle');
+  this.events.bind('click .select-label', 'toggle');
   this.events.bind('click .select-option');
-  this.events.bind('focusin input', 'show');
-  this.events.bind('blur', 'hide');
-  this.events.bind('search input');
   this.events.bind('keydown');
   this.events.bind('keyup');
+  this.events.bind('blur');
   return this;
 };
 
@@ -90,13 +89,14 @@ Select.prototype.label = function(label){
 Select.prototype.multiple = function(label, opts){
   if (this._multiple) return;
   this._multiple = true;
-  var el = search(this, label);
+  var el = this.input = search(this, label);
   var box = query('.select-box', this.el);
   box.innerHTML = '';
   box.appendChild(el);
   this.box = new Pillbox(el, opts);
   this.box.events.unbind('keydown');
   this.box.on('remove', this.deselect.bind(this));
+  el.onfocus = this.show.bind(this);
   return this;
 };
 
@@ -111,8 +111,9 @@ Select.prototype.multiple = function(label, opts){
 Select.prototype.searchable = function(label){
   if (this._searchable) return this;
   this._searchable = true;
-  var el = search(this, label);
+  var el = this.input = search(this, label);
   this.dropdown.insertBefore(el, this.opts);
+  this.on('show', el.focus.bind(el));
   return this;
 };
 
@@ -278,17 +279,24 @@ Select.prototype.show = function(name){
 
   // show
   opt.el.removeAttribute('hidden');
+  console.log('show');
 
   // focus
   if (!this._multiple && !this._searchable) {
     this.el.focus();
   }
 
+  // option
   if ('string' == typeof name) return this;
+
+  // show
   this.emit('show');
   this.classes.add('opened');
-  var opt = this.options[0];
-  if (opt) this.highlight(opt.el);
+
+  // highlight first.
+  var el = query(':not([disabled]):not(.selected)', this.opts);
+  if (el) this.highlight(el);
+
   return this;
 };
 
@@ -346,7 +354,9 @@ Select.prototype.toggle = function(name){
  */
 
 Select.prototype.disable = function(name){
-  this.get(name).el.setAttribute('disabled', true);
+  var opt = this.get(name);
+  opt.el.setAttribute('disabled', true);
+  opt.disabled = true;
   return this;
 };
 
@@ -359,7 +369,9 @@ Select.prototype.disable = function(name){
  */
 
 Select.prototype.enable = function(name){
-  this.get(name).el.removeAttribute('disabled');
+  var opt = this.get(name);
+  opt.el.removeAttribute('disabled');
+  opt.disabled = false;
   return this;
 };
 
@@ -418,6 +430,11 @@ Select.prototype.search = function(term){
   // search
   for (var i = 0; i < len; ++i) {
     var opt = opts[i];
+
+    // Ignore.
+    if (opt.disabled) continue;
+    if (opt.selected) continue;
+
     if (~opt.name.indexOf(expr)) {
       this.show(opt.name);
       if (1 == ++found) this.highlight(opt.el);
@@ -453,7 +470,7 @@ Select.prototype.indexOf = function(name){
 /**
  * Highlight the given `el`.
  *
- * @param {Element} el
+ * @param {String} el
  * @api private
  */
 
@@ -472,7 +489,8 @@ Select.prototype.highlight = function(el){
 
 Select.prototype.next = function(){
   var el = next(this.curr, ':not([hidden]):not(.selected)');
-  this.highlight(el || this.opts.firstChild);
+  el = el || query(':not([hidden]):not(.selected)', this.opts);
+  this.highlight(el);
 };
 
 /**
@@ -483,7 +501,8 @@ Select.prototype.next = function(){
 
 Select.prototype.previous = function(){
   var el = prev(this.curr, ':not([hidden]):not(.selected)');
-  this.highlight(el || this.opts.lastChild);
+  el = el || query(':not([hidden]):not(.selected)');
+  this.highlight(el);
 };
 
 /**
@@ -525,6 +544,18 @@ Select.prototype.onkeydown = function(e){
 
   e.preventDefault();
   this.select(this.curr.textContent);
+};
+
+/**
+ * on-blur.
+ *
+ * @param {Event} e
+ * @api private
+ */
+
+Select.prototype.onblur = function(e){
+  if (this.input) return;
+  this.hide();
 };
 
 /**
@@ -591,22 +622,21 @@ function option(obj, value, el){
 function search(select, label){
   var el = document.createElement('input');
   label = label || select._label;
-  el.type = 'search';
+  el.type = 'text';
   el.placeholder = label;
-  el.incremental = true;
 
   // blur
   el.onblur = function(){
+    el.value = '';
     setTimeout(function(){
       select.hide();
     }, 50);
   };
 
-  // show
-  select.on('show', function(){
-    el.focus();
-    el.value = '';
-  });
+  // search
+  el.oninput = throttle(function(){
+    select.search(el.value);
+  }, 300);
 
   // hide
   select.on('hide', function(){
