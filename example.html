@@ -58,6 +58,16 @@
       outline: 0;
     }
 
+    .select li img {
+      width: 10px;
+      height: 10px;
+      padding: 0 5px 0 0;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
@@ -78,7 +88,7 @@
 
     var two = append(select())
       .label('Select a language...')
-      .add('Javascript')
+      .add('Javascript', 0, '<li><img src="https://i.cloudup.com/Ep2ZCb24mY.jpg">Javascript')
       .add('Google Go')
       .add('Bash')
       .add('Ruby')

@@ -585,14 +585,28 @@ function option(obj, value, el){
     });
   }
 
-  obj.el = obj.el || document.createElement('li');
-  classes(obj.el).add('select-option');
-  classes(obj.el).add('show');
-  obj.value = obj.value || obj.name.toLowerCase();
-  obj.el.textContent = obj.name;
+  // option
   obj.label = obj.name;
   obj.name = obj.name.toLowerCase();
+  obj.value = obj.value || obj.name;
+
+  // element
+  if (!obj.el) {
+    obj.el = document.createElement('li');
+    obj.el.textContent = obj.label;
+  }
+
+  // domify
+  if ('string' == typeof obj.el) {
+    obj.el = domify(obj.el);
+  }
+
+  // setup element
   obj.el.setAttribute('data-name', obj.name);
+  classes(obj.el).add('select-option');
+  classes(obj.el).add('show');
+
+  // opt
   return obj;
 }
 
