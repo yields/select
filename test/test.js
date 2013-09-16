@@ -51,14 +51,14 @@ describe('select()', function(){
   describe('.add(name[, value])', function(){
     var s = select();
 
-    it('should push to `.options`', function(){
-      assert(0 == s.options.length);
+    it('should add to `.options`', function(){
+      assert(!s.options.one);
       s.add('one', 'two');
-      assert(1 == s.options.length);
+      assert(s.options.one);
     })
 
     it('should create a correct option object', function(){
-      var opt = s.options[0];
+      var opt = s.options.one;
       assert('one' == opt.name);
       assert('two' == opt.value);
       assert('one' == dom(opt.el).text());
@@ -78,18 +78,18 @@ describe('select()', function(){
 
     it('should remove it from .options', function(){
       s.add('a');
-      assert(1 == s.options.length);
+      assert(s.options.a);
       s.remove('a');
-      assert(0 == s.options.length);
+      assert(!s.options.a);
     })
 
     it('should remove it from ._selected if its selected', function(){
       s.add('a')
-      assert(1 == s.options.length);
+      assert(s.options.a);
       s.select('a');
       assert(1 == s.selected().length);
       s.remove('a');
-      assert(0 == s.options.length);
+      assert(!s.options.a);
       assert(0 == s.selected().length);
     })
 
@@ -241,7 +241,7 @@ describe('select()', function(){
   describe('.hide', function(){
     describe('(name)', function(){
       it('should add `hidden` attr to the opt', function(){
-        var el = select().add('a').hide('a').options[0].el
+        var el = select().add('a').hide('a').options.a.el;
         assert(el.hasAttribute('hidden'));
       })
     })
@@ -257,7 +257,7 @@ describe('select()', function(){
   describe('.show', function(){
     describe('(name)', function(){
       it('should remove `hidden` attr from the opt', function(){
-        var el = select().add('a').hide('a').show('a').options[0].el
+        var el = select().add('a').hide('a').show('a').options.a.el;
         assert(!el.hasAttribute('hidden'));
       })
     })

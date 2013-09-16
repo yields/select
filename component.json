@@ -18,7 +18,8 @@
     "component/classes": "*",
     "component/events": "*",
     "component/domify": "*",
-    "component/query": "*"
+    "component/query": "*",
+    "component/each": "*"
   },
   "development": {
     "visionmedia/mocha-matrix": "*",

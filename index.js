@@ -14,6 +14,7 @@ var keyname = require('keyname');
 var events = require('events');
 var domify = require('domify');
 var query = require('query');
+var each = require('each');
 var tpl = domify(template);
 
 /**
@@ -36,7 +37,7 @@ function Select(){
   this.dropdown = query('.select-dropdown', this.el);
   this.events = events(this.el, this);
   this._selected = [];
-  this.options = [];
+  this.options = {};
   this.bind();
 }
 
@@ -129,7 +130,7 @@ Select.prototype.searchable = function(label){
 Select.prototype.add = function(name, value){
   var opt = option.apply(null, arguments);
   this.opts.appendChild(opt.el);
-  this.options.push(opt);
+  this.options[opt.name] = opt;
   this.emit('add', opt);
   return this;
 };
@@ -143,26 +144,18 @@ Select.prototype.add = function(name, value){
  */
 
 Select.prototype.remove = function(name){
-  var name = name.toLowerCase()
-    , opts = this.options
-    , len = opts.length
-    , j;
+  name = name.toLowerCase();
+  var opt = this.get(name);
+  this.emit('remove', opt);
+  this.opts.removeChild(opt.el);
 
-  for (var i = 0; i < len; ++i) {
-    if (name == opts[i].name) {
-      this.emit('remove', opts[i]);
-      this.opts.removeChild(opts[i].el);
-
-      // selected
-      if (opts[i].selected) {
-        j = this._selected.indexOf(opts[0]);
-        this._selected.splice(j, 1);
-      }
-
-      opts.splice(i, 1);
-      break;
-    }
+  // selected
+  if (opt.selected) {
+    var i = this._selected.indexOf(opt);
+    this._selected.splice(i, 1);
   }
+
+  delete this.options[name];
 
   return this;
 };
@@ -257,8 +250,8 @@ Select.prototype.deselect = function(name){
 
 Select.prototype.get = function(name){
   if ('string' == typeof name) {
-    var i = this.indexOf(name);
-    var opt = this.options[i];
+    name = name.toLowerCase();
+    var opt = this.options[name];
     if (!opt) throw new Error('option "' + name + '" does not exist');
     return opt;
   }
@@ -279,7 +272,6 @@ Select.prototype.show = function(name){
 
   // show
   opt.el.removeAttribute('hidden');
-  console.log('show');
 
   // focus
   if (!this._multiple && !this._searchable) {
@@ -417,9 +409,8 @@ Select.prototype.search = function(term){
   var expr = term.toLowerCase()
     , opts = this.options
     , len = opts.length
-    , found = 0
-    , i = 0
-    , name;
+    , self = this
+    , found = 0;
 
   // custom search
   this.emit('search', term, opts);
@@ -428,43 +419,20 @@ Select.prototype.search = function(term){
   if (this.hasListeners('search')) return this;
 
   // search
-  for (var i = 0; i < len; ++i) {
-    var opt = opts[i];
+  each(opts, function(name, opt){
+    if (opt.disabled) return;
+    if (opt.selected) return;
 
-    // Ignore.
-    if (opt.disabled) continue;
-    if (opt.selected) continue;
-
-    if (~opt.name.indexOf(expr)) {
-      this.show(opt.name);
-      if (1 == ++found) this.highlight(opt.el);
+    if (~name.indexOf(expr)) {
+      self.show(opt.name);
+      if (1 == ++found) self.highlight(opt.el);
     } else {
-      this.hide(opt.name);
+      self.hide(opt.name);
     }
-  }
+  });
 
   // all done
   return this.emit('found', found);
-};
-
-
-/**
- * Get indexof `name`.
- *
- * @return {Number}
- * @api private
- */
-
-Select.prototype.indexOf = function(name){
-  var name = name.toLowerCase()
-    , all = this.options
-    , len = all.length;
-
-  for (var i = 0; i < len; ++i) {
-    if (name == all[i].name) return i;
-  }
-
-  return -1;
 };
 
 /**
