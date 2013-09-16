@@ -567,6 +567,7 @@ Select.prototype.onblur = function(e){
 
 Select.prototype.onkeyup = function(e){
   switch (keyname(e.which)) {
+    case 'esc': return this.hide();
     case 'down': return this.next();
     case 'up': return this.previous();
   }
