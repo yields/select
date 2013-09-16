@@ -3,18 +3,18 @@
  * dependencies
  */
 
-var template = require('./template')
-  , prev = require('previous-sibling')
-  , next = require('next-sibling')
-  , throttle = require('throttle')
-  , Pillbox = require('pillbox')
-  , classes = require('classes')
-  , Emitter = require('emitter')
-  , keyname = require('keyname')
-  , events = require('events')
-  , domify = require('domify')
-  , query = require('query')
-  , tpl = domify(template);
+var previous = require('previous-sibling');
+var template = require('./template');
+var next = require('next-sibling');
+var throttle = require('throttle');
+var Pillbox = require('pillbox');
+var classes = require('classes');
+var Emitter = require('emitter');
+var keyname = require('keyname');
+var events = require('events');
+var domify = require('domify');
+var query = require('query');
+var tpl = domify(template);
 
 /**
  * Export `Select`
