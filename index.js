@@ -186,7 +186,7 @@ Select.prototype.select = function(name){
 
   // multiple
   if (this._multiple) {
-    this.box.add(name);
+    this.box.add(opt.label);
     this._selected.push(opt);
     this.box.input.value = '';
     this.change();
@@ -198,7 +198,7 @@ Select.prototype.select = function(name){
   var prev = this._selected[0];
   if (prev) this.deselect(prev.name);
   this._selected = [opt];
-  this.label(name);
+  this.label(opt.label);
   this.hide();
   this.change();
   return this;
@@ -408,7 +408,6 @@ Select.prototype.values = function(){
 Select.prototype.search = function(term){
   var expr = term.toLowerCase()
     , opts = this.options
-    , len = opts.length
     , self = this
     , found = 0;
 
@@ -424,7 +423,7 @@ Select.prototype.search = function(term){
     if (opt.selected) return;
 
     if (~name.indexOf(expr)) {
-      self.show(opt.name);
+      self.show(name);
       if (1 == ++found) self.highlight(opt.el);
     } else {
       self.hide(opt.name);
@@ -436,17 +435,33 @@ Select.prototype.search = function(term){
 };
 
 /**
- * Highlight the given `el`.
+ * Highlight the given `name`.
  *
- * @param {String} el
+ * @param {String|Element} el
+ * @return {Select}
  * @api private
  */
 
 Select.prototype.highlight = function(el){
-  var curr = this.curr;
-  if (curr) classes(curr).remove('highlight');
+  if ('string' == typeof el) el = this.get(el).el;
+  this.dehighlight();
   classes(el).add('highlight');
-  this.curr = el;
+  this.active = el;
+  return this;
+};
+
+/**
+ * De-highlight.
+ *
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.dehighlight = function(){
+  if (!this.active) return this;
+  classes(this.active).remove('highlight');
+  this.active = null;
+  return this;
 };
 
 /**
@@ -456,7 +471,7 @@ Select.prototype.highlight = function(el){
  */
 
 Select.prototype.next = function(){
-  var el = next(this.curr, ':not([hidden]):not(.selected)');
+  var el = next(this.active, ':not([hidden]):not(.selected)');
   el = el || query(':not([hidden]):not(.selected)', this.opts);
   this.highlight(el);
 };
@@ -468,8 +483,8 @@ Select.prototype.next = function(){
  */
 
 Select.prototype.previous = function(){
-  var el = prev(this.curr, ':not([hidden]):not(.selected)');
-  el = el || query(':not([hidden]):not(.selected)');
+  var el = previous(this.active, ':not([hidden]):not(.selected)');
+  el = el || query(':not([hidden]):not(.selected):last-child', this.opts);
   this.highlight(el);
 };
 
@@ -505,13 +520,13 @@ Select.prototype.onsearch = function(e){
 Select.prototype.onkeydown = function(e){
   if (!this.visible()) this.show();
 
-  if (!this.curr || 13 != e.which) {
-    if (this.box) return this.box.onkeydown(e);
+  if (!this.active || 13 != e.which) {
+    if (this.box) this.box.onkeydown(e);
     return;
   }
 
   e.preventDefault();
-  this.select(this.curr.textContent);
+  this.select(this.active.getAttribute('data-name'));
 };
 
 /**
@@ -575,7 +590,9 @@ function option(obj, value, el){
   classes(obj.el).add('show');
   obj.value = obj.value || obj.name.toLowerCase();
   obj.el.textContent = obj.name;
+  obj.label = obj.name;
   obj.name = obj.name.toLowerCase();
+  obj.el.setAttribute('data-name', obj.name);
   return obj;
 }
 

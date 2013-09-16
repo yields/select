@@ -332,6 +332,28 @@ describe('select()', function(){
     })
   })
 
+  describe('.highlight(name)', function(){
+    it('should set `.active` to the option element', function(){
+      var sel = select().add('s').highlight('s');
+      assert(sel.active == sel.get('s').el);
+    })
+    it('should add `.highlight` to the option element', function(){
+      var s = select().add('s').highlight('s');
+      assert(dom(s.active).hasClass('highlight'));
+    })
+  })
+
+  describe('.dehighlight()', function(){
+    it('should de-highlight the active option', function(){
+      var sel = select().add('s').highlight('s');
+      var el = sel.active;
+      assert(sel.active);
+      sel.dehighlight();
+      assert(!dom(el).hasClass('highlight'));
+      assert(!sel.active);
+    })
+  })
+
   describe('.values()', function(){
     describe('when something is selected', function(){
       describe('when single', function(){
