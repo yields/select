@@ -39,87 +39,102 @@ select.on('change', function(){
 
 ### Select()
 
-Initialize a new `Select`.
+  Initialize a new `Select`.
 
 #### .label(label)
 
-Set the label.
+  Set the label.
 
 #### .multiple([label])
 
-Allow multiple selections.
+  Allow multiple selections.
 
 #### .searchable([label])
 
-Allow search.
+  Allow search.
 
-#### add(name[, value])
+#### add(name[, value [, el]])
 
-Add an option with `name` and optional `value`.
+  Add an option with `name` and optional `value`.
+
+  An option `el` can be given, this can be either `html` string
+  or native `Element`.
+
+    add('js', 0, '<li><img src="js.jpg">Javascript')
 
 #### remove(name)
 
-Remove an option with `name`.
+  Remove an option with `name`.
 
 #### select(name)
 
-Select an option with `name`.
+  Select an option with `name`.
 
 #### deselect(name)
 
-De-select `name`.
+  De-select `name`.
+
+#### highlight(name)
+
+  Highlight an option by `name`.
+
+  When an option is in "highlight" mode, it will be selected when the
+  user hits enter.
+
+#### dehighlight()
+
+  De-highlight "highlight"ed option
 
 #### get(name)
 
-Get an option with `name`.
+  Get an option with `name`.
 
 #### show([name])
 
-Show the dropdown or option `name`.
+  Show the dropdown or option `name`.
 
 #### hide([name])
 
-Hide the dropdown or option `name`.
+  Hide the dropdown or option `name`.
 
 #### visible([name])
 
-Check if option `name` or dropdown are visible.
+  Check if option `name` or dropdown are visible.
 
 #### toggle([name])
 
-Toggle `.show([name])`, `.hide([name])`.
+  Toggle `.show([name])`, `.hide([name])`.
 
 #### disable(name)
 
-Disable an option `name`.
+  Disable an option `name`.
 
 #### enable(name)
 
-Enable an option `name`.
+  Enable an option `name`.
 
 #### selected([options])
 
-Get / set selected options.
+  Get / set selected options.
 
 #### values()
 
-Get selected values.
+  Get selected values.
 
 #### search(term)
 
-Search options with `term`, if there are listeners for `search` event, the `.search()` method will do nothing.
-this allows you to set up custom search.
+  Search options with `term`, if there are listeners for `search` event, the `.search()` method will do nothing.
+  this allows you to set up custom search.
 
-```js
-select = select()
-  .add('one')
-  .add('two')
-  .on('search', function(term){
-    ajax(term, function(opts){
-      opts.forEach(select.add, select)
-    })
-  });
-```
+    select = select()
+      .add('one')
+      .add('two')
+      .on('search', function(term){
+        ajax(term, function(opts){
+          opts.forEach(select.add, select);
+          sel.highlight(opts[0].name)
+        })
+      })
 
 ### Events
 
