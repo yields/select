@@ -35,6 +35,8 @@ function Select(){
   this.classes = classes(this.el);
   this.opts = query('.select-options', this.el);
   this.dropdown = query('.select-dropdown', this.el);
+  this.input = query('.select-input', this.el);
+  this.inputEvents = events(this.input, this);
   this.events = events(this.el, this);
   this._selected = [];
   this.options = {};
@@ -55,12 +57,14 @@ Emitter(Select.prototype);
  */
 
 Select.prototype.bind = function(){
-  this.events.bind('click .select-box', 'toggle');
-  this.events.bind('click .select-label', 'toggle');
-  this.events.bind('click .select-option');
+  this.events.bind('click .select-box', 'focus');
+  this.events.bind('mousedown .select-option');
+  var onsearch = this.onsearch.bind(this);
+  this.input.oninput = throttle(onsearch, 300);
+  this.inputEvents.bind('focus', 'show');
+  this.inputEvents.bind('blur');
   this.events.bind('keydown');
   this.events.bind('keyup');
-  this.events.bind('blur');
   return this;
 };
 
@@ -73,8 +77,8 @@ Select.prototype.bind = function(){
  */
 
 Select.prototype.label = function(label){
-  query('.select-label', this.el).textContent = label;
   this._label = label;
+  this.input.placeholder = label;
   return this;
 };
 
@@ -90,31 +94,10 @@ Select.prototype.label = function(label){
 Select.prototype.multiple = function(label, opts){
   if (this._multiple) return;
   this._multiple = true;
-  var el = this.input = search(this, label);
-  var box = query('.select-box', this.el);
-  box.innerHTML = '';
-  box.appendChild(el);
-  this.box = new Pillbox(el, opts);
+  this.classes.remove('select-single');
+  this.box = new Pillbox(this.input, opts);
   this.box.events.unbind('keydown');
   this.box.on('remove', this.deselect.bind(this));
-  el.onfocus = this.show.bind(this);
-  return this;
-};
-
-/**
- * Make it searchable.
- *
- * @param {String} label
- * @return {Select}
- * @api public
- */
-
-Select.prototype.searchable = function(label){
-  if (this._searchable) return this;
-  this._searchable = true;
-  var el = this.input = search(this, label);
-  this.dropdown.insertBefore(el, this.opts);
-  this.on('show', el.focus.bind(el));
   return this;
 };
 
@@ -188,7 +171,7 @@ Select.prototype.select = function(name){
   if (this._multiple) {
     this.box.add(opt.label);
     this._selected.push(opt);
-    this.box.input.value = '';
+    this.input.value = '';
     this.change();
     this.hide();
     return this;
@@ -198,7 +181,7 @@ Select.prototype.select = function(name){
   var prev = this._selected[0];
   if (prev) this.deselect(prev.name);
   this._selected = [opt];
-  this.label(opt.label);
+  this.input.value = opt.label;
   this.hide();
   this.change();
   return this;
@@ -232,6 +215,9 @@ Select.prototype.deselect = function(name){
     this.change();
     return this;
   }
+
+  // deselect
+  this.classes.remove('selected');
 
   // single
   this.label(this._label);
@@ -283,10 +269,10 @@ Select.prototype.show = function(name){
 
   // show
   this.emit('show');
-  this.classes.add('opened');
+  this.classes.add('open');
 
   // highlight first.
-  var el = query(':not([disabled]):not(.selected)', this.opts);
+  var el = query('.select-option:not([hidden]):not(.selected)', this.opts);
   if (el) this.highlight(el);
 
   return this;
@@ -303,9 +289,10 @@ Select.prototype.show = function(name){
 Select.prototype.hide = function(name){
   var opt = this.get(name);
   opt.el.setAttribute('hidden', '');
-  if (name) return this;
+  if ('string' == typeof name) return this;
   this.emit('hide');
-  this.classes.remove('opened');
+  this.classes.remove('open');
+  this.showAll();
   return this;
 };
 
@@ -465,6 +452,18 @@ Select.prototype.dehighlight = function(){
 };
 
 /**
+ * Focus input.
+ *
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.focus = function(){
+  this.input.focus();
+  return this;
+};
+
+/**
  * Highlight next element.
  *
  * @api private
@@ -472,7 +471,7 @@ Select.prototype.dehighlight = function(){
 
 Select.prototype.next = function(){
   var el = next(this.active, ':not([hidden]):not(.selected)');
-  el = el || query(':not([hidden]):not(.selected)', this.opts);
+  el = el || query('.select-option:not([hidden])', this.opts);
   this.highlight(el);
 };
 
@@ -484,20 +483,9 @@ Select.prototype.next = function(){
 
 Select.prototype.previous = function(){
   var el = previous(this.active, ':not([hidden]):not(.selected)');
-  el = el || query(':not([hidden]):not(.selected):last-child', this.opts);
+  el = el || query.all('.select-option:not([hidden])', this.el);
+  if (el.length) el = el[el.length - 1];
   this.highlight(el);
-};
-
-/**
- * on-click.
- *
- * @param {Event} e
- * @api private
- */
-
-Select.prototype.onclick = function(e){
-  var name = e.target.getAttribute('data-name');
-  this.select(name);
 };
 
 /**
@@ -508,7 +496,11 @@ Select.prototype.onclick = function(e){
  */
 
 Select.prototype.onsearch = function(e){
-  this.search(e.target.value);
+  if (e.target.value) {
+    this.search(e.target.value);
+  } else {
+    this.showAll();
+  }
 };
 
 /**
@@ -530,15 +522,15 @@ Select.prototype.onkeydown = function(e){
 };
 
 /**
- * on-blur.
+ * on-mousedown.
  *
  * @param {Event} e
  * @api private
  */
 
-Select.prototype.onblur = function(e){
-  if (this.input) return;
-  this.hide();
+Select.prototype.onmousedown = function(e){
+  var name = e.target.getAttribute('data-name');
+  this.select(name);
 };
 
 /**
@@ -549,20 +541,26 @@ Select.prototype.onblur = function(e){
  */
 
 Select.prototype.onkeyup = function(e){
-  var el = this.input;
-
-  // show
-  if (!this.visible() && el.value.length) {
-    this.show();
-  }
-
-  // handle keys
   switch (keyname(e.which)) {
-    case 'down': return this.next();
-    case 'up': return this.previous();
+    case 'down':
+      this.next();
+      break;
+    case 'up':
+      this.previous();
+      break;
     case 'esc':
       this.hide();
-      el.value = '';
+      this.input.value = '';
+      break;
+    case 'enter':
+      break;
+    case 'backspace':
+      if (this._multiple) return;
+      if (!this._selected.length) return;
+      this.deselect(this._selected[0].name);
+      break;
+    default:
+      this.show();
   }
 };
 
@@ -574,6 +572,38 @@ Select.prototype.onkeyup = function(e){
 
 Select.prototype.change = function(){
   this.emit('change', this);
+};
+
+/**
+ * on-blur.
+ *
+ * @param {Event} e
+ * @api public
+ */
+
+Select.prototype.onblur = function(e){
+  this.showAll();
+  this.hide();
+  if (this._multiple) {
+    this.input.value = '';
+  }
+};
+
+/**
+ * Show all options.
+ *
+ * @return {Select}
+ * @api private
+ */
+
+Select.prototype.showAll = function(){
+  var els = query.all('[hidden]:not(.selected)', this.opts);
+
+  for (var i = 0; i < els.length; ++i) {
+    els[i].removeAttribute('hidden');
+  }
+
+  return this;
 };
 
 /**
@@ -618,44 +648,4 @@ function option(obj, value, el){
 
   // opt
   return obj;
-}
-
-/**
- * Get a search input.
- *
- * @param {Select} select
- * @param {String} label
- * @return {Element}
- * @api private
- */
-
-function search(select, label){
-  var el = document.createElement('input');
-  label = label || select._label;
-  el.type = 'text';
-  el.placeholder = label;
-
-  // blur
-  el.onblur = function(e){
-    var target = e.relatedTarget;
-    el.value = '';
-    if (target == select.el) return;
-    select.hide();
-  };
-
-  // search
-  el.oninput = throttle(function(){
-    select.search(el.value);
-  }, 300);
-
-  // hide
-  select.on('hide', function(){
-    el.value = '';
-    var els = query.all('[hidden]:not(.selected)', select.opts);
-    for (var i = 0; i < els.length; ++i) {
-      els[i].removeAttribute('hidden');
-    }
-  });
-
-  return el;
 }

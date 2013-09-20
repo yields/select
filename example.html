@@ -16,46 +16,18 @@
 
     .select {
       display: block;
-      max-width: 300px;
-      margin-top: 30px;
+      width: 300px;
+      margin: 30px 0;
     }
 
-    .select .select-option.highlight {
-      color: rgb(63, 191, 191);
-    }
-
-    .select .select-option:hover {
-      color: rgb(63, 191, 191);
-    }
-
-    .select .pillbox li {
+    .pillbox li {
+      padding: 2px;
       background: #fff;
-      padding: 2px 6px;
-      font-size: 11px;
       border: 1px solid #ddd;
       margin: 3px;
-    }
-
-    .select .pillbox li a {
-      color: rgb(63, 191, 191);
-      text-decoration: none;
-      padding: 0 0 0 6px ;
-    }
-
-    *[hidden] {
-      display: none !important;
-    }
-
-    .select-dropdown input {
-      border: 0 none;
-      display: block;
-      border-bottom: 1px solid #ddd;
-      padding: 6px;
-      width: 100%;
-    }
-
-    input:focus {
-      outline: 0;
+      padding-right: 20px;
+      position: relative;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, .03);
     }
 
     .select li img {
@@ -64,10 +36,61 @@
       padding: 0 5px 0 0;
     }
 
-    strong {
-      font-weight: bold;
+    .select .select-box {
+      border-radius: 3px;
+      padding: 5px;
     }
 
+    .select .select-dropdown {
+      width: 310px;
+    }
+
+    .select.open .select-box {
+      border-radius: 3px 3px 0 0;
+    }
+
+    .pillbox li a {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 15px;
+      text-align: center;
+      line-height: 20px;
+      color: #ddd;
+      border-left: 1px solid #ddd;
+      font-size: 10px;
+      text-decoration: none;
+    }
+
+    .pillbox li a:hover {
+      background: #eee;
+      color: rgb(152, 218, 142);
+    }
+
+    .select.open .select-box {
+      border-bottom: 1px solid #eee;
+    }
+
+    .highlight {
+      background: #f9f9f9;
+    }
+
+    input {
+      background: transparent;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    .select-single {
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .03), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -96,17 +119,6 @@
       .add('C++')
       .add('C');
 
-    var three = append(select())
-      .label('Search a language...')
-      .searchable()
-      .add('Javascript')
-      .add('Google Go')
-      .add('Bash')
-      .add('Ruby')
-      .add('Lua')
-      .add('C++')
-      .add('C');
-
 
     function append(s){
       document.body.appendChild(s.el);
@@ -119,10 +131,10 @@
     .select('C')
     .deselect('C');
 
-    [one, two, three].forEach(function(select){
+    [one, two].forEach(function(select){
       select.on('change', function(){
-        console.log('change: %O', select.el);
-        console.log('values: %O', select.values());
+        console.log('change: %o', select.el);
+        console.log('values: %o', select.values());
       });
     });
   </script>
