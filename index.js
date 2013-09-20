@@ -496,7 +496,8 @@ Select.prototype.previous = function(){
  */
 
 Select.prototype.onclick = function(e){
-  this.select(e.target.textContent);
+  var name = e.target.getAttribute('data-name');
+  this.select(name);
 };
 
 /**
@@ -636,7 +637,10 @@ function search(select, label){
 
   // blur
   el.onblur = function(e){
+    var target = e.relatedTarget;
     el.value = '';
+    if (target == select.el) return;
+    select.hide();
   };
 
   // search
