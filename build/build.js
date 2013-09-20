@@ -1809,6 +1809,7 @@ Emitter(Select.prototype);
 Select.prototype.bind = function(){
   this.events.bind('click .select-box', 'focus');
   this.events.bind('mousedown .select-option');
+  this.events.bind('mouseover .select-option');
   var onsearch = this.onsearch.bind(this);
   this.input.oninput = throttle(onsearch, 300);
   this.inputEvents.bind('focus', 'show');
@@ -2281,6 +2282,18 @@ Select.prototype.onkeydown = function(e){
 Select.prototype.onmousedown = function(e){
   var name = e.target.getAttribute('data-name');
   this.select(name);
+};
+
+/**
+ * on-mouseover
+ *
+ * @param {Event} e
+ * @api private
+ */
+
+Select.prototype.onmouseover = function(e){
+  var name = e.target.getAttribute('data-name');
+  this.highlight(name);
 };
 
 /**
