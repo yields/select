@@ -518,15 +518,14 @@ Select.prototype.onsearch = function(e){
  */
 
 Select.prototype.onkeydown = function(e){
-  if (!this.visible()) this.show();
-
   if (!this.active || 13 != e.which) {
     if (this.box) this.box.onkeydown(e);
     return;
   }
 
+  var name = this.active.getAttribute('data-name');
   e.preventDefault();
-  this.select(this.active.getAttribute('data-name'));
+  this.select(name);
 };
 
 /**
@@ -549,10 +548,20 @@ Select.prototype.onblur = function(e){
  */
 
 Select.prototype.onkeyup = function(e){
+  var el = this.input;
+
+  // show
+  if (!this.visible() && el.value.length) {
+    this.show();
+  }
+
+  // handle keys
   switch (keyname(e.which)) {
-    case 'esc': return this.hide();
     case 'down': return this.next();
     case 'up': return this.previous();
+    case 'esc':
+      this.hide();
+      el.value = '';
   }
 };
 
@@ -626,11 +635,8 @@ function search(select, label){
   el.placeholder = label;
 
   // blur
-  el.onblur = function(){
+  el.onblur = function(e){
     el.value = '';
-    setTimeout(function(){
-      select.hide();
-    }, 50);
   };
 
   // search
