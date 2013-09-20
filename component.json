@@ -1,0 +1,6 @@
+{
+  "name": "select-demo",
+  "dependencies": {
+    "yields/select": "*"
+  }
+}
