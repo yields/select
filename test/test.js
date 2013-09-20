@@ -8,7 +8,7 @@ describe('select()', function(){
   describe('.label(label)', function(){
     it('should set the label', function(){
       var s = select().label('label');
-      assert('label' == dom('.select-label', s.el).text());
+      assert('label' == dom('.select-input', s.el).placeholder());
     })
   })
 
@@ -29,22 +29,6 @@ describe('select()', function(){
 
     it('should append the pillbox to `.select-box`', function(){
       assert(dom('.pillbox', s.el).length());
-    })
-  })
-
-  describe('.searchable()', function(){
-    var s;
-
-    before(function(){
-      s = select().searchable();
-    })
-
-    it('should set ._searchable to `true`', function(){
-      assert(true == s._searchable);
-    })
-
-    it('should create an input and add it in `.select-dropdown`', function(){
-      assert(dom('input', s.dropdown).length());
     })
   })
 
