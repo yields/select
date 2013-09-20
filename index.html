@@ -17,7 +17,6 @@
     .select {
       display: block;
       width: 300px;
-      margin: 30px 0;
     }
 
     .pillbox li {
@@ -91,6 +90,11 @@
     [hidden] {
       display: none !important;
     }
+
+    pre {
+      font-size: 8px;
+      margin-bottom: 30px;
+    }
   </style>
 </head>
 <body>
@@ -122,8 +126,23 @@
 
     function append(s){
       document.body.appendChild(s.el);
+      s.pre = document.createElement('pre');
+      document.body.appendChild(s.pre);
+      values(s);
       return s;
     }
+
+    function values(s){
+      s.pre.textContent = JSON.stringify(s.values());
+    }
+
+    [one, two].forEach(function(select){
+      select.on('change', function(){
+        console.log('change: %o', select.el);
+        console.log('values: %o', select.values());
+        values(select);
+      });
+    });
 
     one
     .select('Google Go')
@@ -131,12 +150,6 @@
     .select('C')
     .deselect('C');
 
-    [one, two].forEach(function(select){
-      select.on('change', function(){
-        console.log('change: %o', select.el);
-        console.log('values: %o', select.values());
-      });
-    });
   </script>
 </body>
 </html>
