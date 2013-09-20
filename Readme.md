@@ -2,7 +2,7 @@
 
   modern &lt;select&gt;. (WIP)
 
-  [![select](https://i.cloudup.com/j1xDWsU3FM.gif)](https://cloudup.com/cg4UdfFX5js)
+  [see the demo](http://yields.github.io/select/index.html)
 
 ```js
 select
