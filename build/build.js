@@ -2225,9 +2225,10 @@ Select.prototype.focus = function(){
  */
 
 Select.prototype.next = function(){
+  if (!this.active) return;
   var el = next(this.active, ':not([hidden]):not(.selected)');
   el = el || query('.select-option:not([hidden])', this.opts);
-  this.highlight(el);
+  if (el) this.highlight(el);
 };
 
 /**
@@ -2237,10 +2238,11 @@ Select.prototype.next = function(){
  */
 
 Select.prototype.previous = function(){
+  if (!this.active) return;
   var el = previous(this.active, ':not([hidden]):not(.selected)');
   el = el || query.all('.select-option:not([hidden])', this.el);
   if (el.length) el = el[el.length - 1];
-  this.highlight(el);
+  if (el.className) this.highlight(el);
 };
 
 /**
@@ -2266,14 +2268,42 @@ Select.prototype.onsearch = function(e){
  */
 
 Select.prototype.onkeydown = function(e){
-  if (!this.active || 13 != e.which) {
-    if (this.box) this.box.onkeydown(e);
-    return;
-  }
+  var multi = this._multiple
+    , visible = this.visible()
+    , active = this.active
+    , box = this.box;
 
-  var name = this.active.getAttribute('data-name');
-  e.preventDefault();
-  this.select(name);
+  // actions
+  switch (keyname(e.which)) {
+    case 'down':
+      e.preventDefault();
+      visible
+        ? this.next()
+        : this.show();
+      break;
+    case 'up':
+      e.preventDefault();
+      visible
+        ? this.previous()
+        : this.show();
+      break;
+    case 'esc':
+      this.hide();
+      this.input.value = '';
+      break;
+    case 'enter':
+      if (!this.active || !visible) return;
+      var name = this.active.getAttribute('data-name');
+      this.select(name);
+      break;
+    case 'backspace':
+      if (box) return box.onkeydown(e);
+      var all = this._selected;
+      var item = all[all.length - 1];
+      if (!item) return;
+      this.deselect(item.name);
+      break;
+  }
 };
 
 /**
@@ -2308,31 +2338,6 @@ Select.prototype.onmouseover = function(e){
  */
 
 Select.prototype.onkeyup = function(e){
-  var visible = this.visible();
-
-  switch (keyname(e.which)) {
-    case 'down': visible
-        ? this.next()
-        : this.show();
-      break;
-    case 'up': visible
-        ? this.previous()
-        : this.show();
-      break;
-    case 'esc':
-      this.hide();
-      this.input.value = '';
-      break;
-    case 'enter':
-      break;
-    case 'backspace':
-      if (this._multiple) return;
-      if (!this._selected.length) return;
-      this.deselect(this._selected[0].name);
-      break;
-    default:
-      this.show();
-  }
 };
 
 /**
