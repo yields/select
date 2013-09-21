@@ -1174,7 +1174,7 @@ require.register("component-event/index.js", function(exports, require, module){
 
 exports.bind = function(el, type, fn, capture){
   if (el.addEventListener) {
-    el.addEventListener(type, fn, capture);
+    el.addEventListener(type, fn, capture || false);
   } else {
     el.attachEvent('on' + type, fn);
   }
@@ -1194,7 +1194,7 @@ exports.bind = function(el, type, fn, capture){
 
 exports.unbind = function(el, type, fn, capture){
   if (el.removeEventListener) {
-    el.removeEventListener(type, fn, capture);
+    el.removeEventListener(type, fn, capture || false);
   } else {
     el.detachEvent('on' + type, fn);
   }
@@ -1815,7 +1815,6 @@ Select.prototype.bind = function(){
   this.inputEvents.bind('focus', 'show');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
-  this.events.bind('keyup');
   return this;
 };
 
@@ -2328,16 +2327,6 @@ Select.prototype.onmousedown = function(e){
 Select.prototype.onmouseover = function(e){
   var name = e.target.getAttribute('data-name');
   this.highlight(name);
-};
-
-/**
- * on-keyup.
- *
- * @param {Event} e
- * @api private
- */
-
-Select.prototype.onkeyup = function(e){
 };
 
 /**

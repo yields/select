@@ -29,6 +29,11 @@
       box-shadow: 0 1px 1px rgba(0, 0, 0, .03);
     }
 
+    .select.open .select-box,
+    .select.open .select-dropdown {
+      border: 1px solid #ccc;
+    }
+
     .select li img {
       width: 10px;
       height: 10px;
@@ -40,8 +45,11 @@
       padding: 5px;
     }
 
-    .select .select-dropdown {
+    .select.open .select-dropdown {
       width: 310px;
+      border-radius: 0 0 3px 3px;
+      border-top-width: 0;
+      overflow: hidden;
     }
 
     .select.open .select-box {
@@ -68,7 +76,7 @@
     }
 
     .select.open .select-box {
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #eee
     }
 
     .highlight {
