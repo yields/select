@@ -1923,6 +1923,7 @@ Select.prototype.select = function(name){
     this.box.add(opt.label);
     this._selected.push(opt);
     this.input.value = '';
+    this.dehighlight();
     this.change();
     this.hide();
     return this;
@@ -2007,6 +2008,9 @@ Select.prototype.get = function(name){
 Select.prototype.show = function(name){
   var opt = this.get(name);
 
+  // visible
+  if (this.visible(name)) return this;
+
   // show
   opt.el.removeAttribute('hidden');
 
@@ -2022,7 +2026,7 @@ Select.prototype.show = function(name){
   this.emit('show');
   this.classes.add('open');
 
-  // highlight first.
+  // highlight
   var el = query('.select-option:not([hidden]):not(.selected)', this.opts);
   if (el) this.highlight(el);
 
@@ -2304,12 +2308,16 @@ Select.prototype.onmouseover = function(e){
  */
 
 Select.prototype.onkeyup = function(e){
+  var visible = this.visible();
+
   switch (keyname(e.which)) {
-    case 'down':
-      this.next();
+    case 'down': visible
+        ? this.next()
+        : this.show();
       break;
-    case 'up':
-      this.previous();
+    case 'up': visible
+        ? this.previous()
+        : this.show();
       break;
     case 'esc':
       this.hide();
