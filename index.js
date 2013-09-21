@@ -6,7 +6,7 @@
 var previous = require('previous-sibling');
 var template = require('./template');
 var next = require('next-sibling');
-var throttle = require('throttle');
+var debounce = require('debounce');
 var Pillbox = require('pillbox');
 var classes = require('classes');
 var Emitter = require('emitter');
@@ -61,7 +61,7 @@ Select.prototype.bind = function(){
   this.events.bind('mousedown .select-option');
   this.events.bind('mouseover .select-option');
   var onsearch = this.onsearch.bind(this);
-  this.input.oninput = throttle(onsearch, 300);
+  this.input.oninput = debounce(onsearch, 300);
   this.inputEvents.bind('focus', 'show');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');

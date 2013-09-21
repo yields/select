@@ -12,7 +12,7 @@
   "dependencies": {
     "ianstormtaylor/previous-sibling": "*",
     "ianstormtaylor/next-sibling": "*",
-    "component/throttle": "*",
+    "matthewmueller/debounce": "*",
     "component/pillbox": "*",
     "component/emitter": "*",
     "component/keyname": "*",
