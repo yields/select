@@ -599,7 +599,10 @@ Select.prototype.change = function(){
 Select.prototype.onblur = function(e){
   this.showAll();
   this.hide();
+
   if (this._multiple) {
+    this.input.value = '';
+  } else if (!this._selected.length) {
     this.input.value = '';
   }
 };
