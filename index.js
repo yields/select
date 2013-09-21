@@ -65,7 +65,6 @@ Select.prototype.bind = function(){
   this.inputEvents.bind('focus', 'show');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
-  this.events.bind('keyup');
   return this;
 };
 
@@ -578,16 +577,6 @@ Select.prototype.onmousedown = function(e){
 Select.prototype.onmouseover = function(e){
   var name = e.target.getAttribute('data-name');
   this.highlight(name);
-};
-
-/**
- * on-keyup.
- *
- * @param {Event} e
- * @api private
- */
-
-Select.prototype.onkeyup = function(e){
 };
 
 /**
