@@ -4,7 +4,7 @@
  */
 
 var previous = require('previous-sibling');
-var template = require('./template');
+var template = require('./template.html');
 var next = require('next-sibling');
 var debounce = require('debounce');
 var Pillbox = require('pillbox');
