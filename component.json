@@ -2,6 +2,7 @@
   "name": "select",
   "repo": "yields/select",
   "description": "modern <select>.",
+  "demo": "http://yields.github.io/select/index.html",
   "version": "0.1.0",
   "keywords": ["select", "chosen", "select2"],
   "license": "MIT",
