@@ -173,6 +173,7 @@ Select.prototype.select = function(name){
     this.box.add(opt.label);
     this._selected.push(opt);
     this.input.value = '';
+    this.dehighlight();
     this.change();
     this.hide();
     return this;
