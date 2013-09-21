@@ -332,37 +332,40 @@ function nextSibling (el, selector) {
   return el || null;
 }
 });
-require.register("component-throttle/index.js", function(exports, require, module){
-
+require.register("matthewmueller-debounce/index.js", function(exports, require, module){
 /**
- * Module exports.
- */
-
-module.exports = throttle;
-
-/**
- * Returns a new function that, when invoked, invokes `func` at most one time per
- * `wait` milliseconds.
+ * Debounces a function by the given threshold.
  *
- * @param {Function} func The `Function` instance to wrap.
- * @param {Number} wait The minimum number of milliseconds that must elapse in between `func` invokations.
- * @return {Function} A new function that wraps the `func` function passed in.
+ * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+ * @param {Function} function to wrap
+ * @param {Number} timeout in ms (`100`)
+ * @param {Boolean} whether to execute at the beginning (`true`)
  * @api public
  */
 
-function throttle (func, wait) {
-  var rtn; // return value
-  var last = 0; // last invokation timestamp
-  return function throttled () {
-    var now = new Date().getTime();
-    var delta = now - last;
-    if (delta >= wait) {
-      rtn = func.apply(this, arguments);
-      last = now;
+module.exports = function debounce(func, threshold, execAsap){
+  var timeout;
+  if (false !== execAsap) execAsap = true;
+
+  return function debounced(){
+    var obj = this, args = arguments;
+
+    function delayed () {
+      if (!execAsap) {
+        func.apply(obj, args);
+      }
+      timeout = null;
     }
-    return rtn;
+
+    if (timeout) {
+      clearTimeout(timeout);
+    } else if (execAsap) {
+      func.apply(obj, args);
+    }
+
+    timeout = setTimeout(delayed, threshold || 100);
   };
-}
+};
 
 });
 require.register("component-set/index.js", function(exports, require, module){
@@ -1174,7 +1177,7 @@ require.register("component-event/index.js", function(exports, require, module){
 
 exports.bind = function(el, type, fn, capture){
   if (el.addEventListener) {
-    el.addEventListener(type, fn, capture || false);
+    el.addEventListener(type, fn, capture);
   } else {
     el.attachEvent('on' + type, fn);
   }
@@ -1194,7 +1197,7 @@ exports.bind = function(el, type, fn, capture){
 
 exports.unbind = function(el, type, fn, capture){
   if (el.removeEventListener) {
-    el.removeEventListener(type, fn, capture || false);
+    el.removeEventListener(type, fn, capture);
   } else {
     el.detachEvent('on' + type, fn);
   }
@@ -1754,9 +1757,9 @@ require.register("yields-select/index.js", function(exports, require, module){
  */
 
 var previous = require('previous-sibling');
-var template = require('./template');
+var template = require('./template.html');
 var next = require('next-sibling');
-var throttle = require('throttle');
+var debounce = require('debounce');
 var Pillbox = require('pillbox');
 var classes = require('classes');
 var Emitter = require('emitter');
@@ -1811,7 +1814,7 @@ Select.prototype.bind = function(){
   this.events.bind('mousedown .select-option');
   this.events.bind('mouseover .select-option');
   var onsearch = this.onsearch.bind(this);
-  this.input.oninput = throttle(onsearch, 300);
+  this.input.oninput = debounce(onsearch, 300);
   this.inputEvents.bind('focus', 'show');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
@@ -2349,7 +2352,10 @@ Select.prototype.change = function(){
 Select.prototype.onblur = function(e){
   this.showAll();
   this.hide();
+
   if (this._multiple) {
+    this.input.value = '';
+  } else if (!this._selected.length) {
     this.input.value = '';
   }
 };
@@ -2416,24 +2422,23 @@ function option(obj, value, el){
 }
 
 });
-require.register("yields-select/template.js", function(exports, require, module){
+
+
+
+
+
+
+
+
+
+
+
+
+
+require.register("yields-select/template.html", function(exports, require, module){
 module.exports = '<div class=\'select select-single\'>\n  <div class=\'select-box\'>\n    <input type=\'text\' class=\'select-input\'>\n  </div>\n  <div class=\'select-dropdown\' hidden>\n    <ul class=\'select-options\'></ul>\n  </div>\n</div>\n';
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 require.alias("yields-select/index.js", "select-demo/deps/select/index.js");
-require.alias("yields-select/template.js", "select-demo/deps/select/template.js");
 require.alias("yields-select/index.js", "select-demo/deps/select/index.js");
 require.alias("yields-select/index.js", "select/index.js");
 require.alias("ianstormtaylor-previous-sibling/index.js", "yields-select/deps/previous-sibling/index.js");
@@ -2450,7 +2455,7 @@ require.alias("component-matches-selector/index.js", "yields-traverse/deps/match
 require.alias("component-query/index.js", "component-matches-selector/deps/query/index.js");
 
 require.alias("yields-traverse/index.js", "yields-traverse/index.js");
-require.alias("component-throttle/index.js", "yields-select/deps/throttle/index.js");
+require.alias("matthewmueller-debounce/index.js", "yields-select/deps/debounce/index.js");
 
 require.alias("component-pillbox/index.js", "yields-select/deps/pillbox/index.js");
 require.alias("component-events/index.js", "component-pillbox/deps/events/index.js");
