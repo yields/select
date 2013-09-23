@@ -74,6 +74,10 @@ select.on('change', function(){
 
   De-select `name`.
 
+#### focus()
+
+  Focus `<input>`.
+
 #### highlight(name)
 
   Highlight an option by `name`.
