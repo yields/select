@@ -5,7 +5,9 @@
   [see the demo](http://yields.github.io/select/index.html)
 
 ```js
-select
+var Select = require('select');
+
+var select = Select()
   .label('Select a language')
   .multiple()
   .add('Javascript')
@@ -138,13 +140,13 @@ select.on('change', function(){
   Search options with `term`, if there are listeners for `search` event, the `.search()` method will do nothing.
   this allows you to set up custom search.
 
-    select = select()
+    var select = Select()
       .add('one')
       .add('two')
       .on('search', function(term){
         ajax(term, function(opts){
           opts.forEach(select.add, select);
-          sel.highlight(opts[0].name)
+          select.highlight(opts[0].name);
         })
       })
 
