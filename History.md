@@ -1,4 +1,16 @@
 
+0.3.0 / 2013-09-23
+==================
+
+ * add .unbind()
+ * add .blur()
+ * fix ios7 blur, closes #25
+ * fix search on backspace, closes #26
+ * add .focus() docs, closes #27
+ * clear single select on blur, closes #21
+ * use matthewmueller/debounce, closes #23
+ * Load `template.html` directly [jonathanong]
+
 0.2.0 / 2013-09-21
 ==================
 
