@@ -78,6 +78,10 @@ select.on('change', function(){
 
   Focus `<input>`.
 
+#### blur()
+
+  Blur `<input>`.
+
 #### highlight(name)
 
   Highlight an option by `name`.
