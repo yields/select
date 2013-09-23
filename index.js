@@ -59,7 +59,6 @@ Emitter(Select.prototype);
 
 Select.prototype.bind = function(){
   this.events.bind('click .select-box', 'focus');
-  this.events.bind('mousedown .select-option');
   this.events.bind('mouseover .select-option');
   var onsearch = this.onsearch.bind(this);
   this.input.onkeyup = debounce(onsearch, 300);
@@ -128,6 +127,7 @@ Select.prototype.multiple = function(label, opts){
 
 Select.prototype.add = function(name, value){
   var opt = option.apply(null, arguments);
+  opt.el.onmousedown = this.select.bind(this, name);
   this.opts.appendChild(opt.el);
   this.options[opt.name] = opt;
   this.emit('add', opt);
@@ -581,18 +581,6 @@ Select.prototype.onkeydown = function(e){
       this.deselect(item.name);
       break;
   }
-};
-
-/**
- * on-mousedown.
- *
- * @param {Event} e
- * @api private
- */
-
-Select.prototype.onmousedown = function(e){
-  var name = e.target.getAttribute('data-name');
-  this.select(name);
 };
 
 /**
