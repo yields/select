@@ -41,6 +41,10 @@ select.on('change', function(){
 
   Initialize a new `Select`.
 
+#### .unbind()
+
+  Unbind internal events.
+
 #### .label(label)
 
   Set the label.

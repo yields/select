@@ -71,6 +71,20 @@ Select.prototype.bind = function(){
 };
 
 /**
+ * Unbind internal events.
+ *
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.unbind = function(){
+  this.inputEvents.unbind();
+  this.docEvents.unbind();
+  this.events.unbind();
+  return this;
+};
+
+/**
  * Set the select label.
  *
  * @param {String} label
