@@ -61,7 +61,7 @@ Select.prototype.bind = function(){
   this.events.bind('mousedown .select-option');
   this.events.bind('mouseover .select-option');
   var onsearch = this.onsearch.bind(this);
-  this.input.oninput = debounce(onsearch, 300);
+  this.input.onkeyup = debounce(onsearch, 300);
   this.inputEvents.bind('focus', 'show');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
