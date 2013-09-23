@@ -37,6 +37,7 @@ function Select(){
   this.dropdown = query('.select-dropdown', this.el);
   this.input = query('.select-input', this.el);
   this.inputEvents = events(this.input, this);
+  this.docEvents = events(document, this);
   this.events = events(this.el, this);
   this._selected = [];
   this.options = {};
@@ -62,6 +63,7 @@ Select.prototype.bind = function(){
   this.events.bind('mouseover .select-option');
   var onsearch = this.onsearch.bind(this);
   this.input.onkeyup = debounce(onsearch, 300);
+  this.docEvents.bind('touchstart', 'blur');
   this.inputEvents.bind('focus', 'show');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
@@ -464,6 +466,18 @@ Select.prototype.dehighlight = function(){
 
 Select.prototype.focus = function(){
   this.input.focus();
+  return this;
+};
+
+/**
+ * Blur input.
+ *
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.blur = function(){
+  this.input.blur();
   return this;
 };
 
