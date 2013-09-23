@@ -332,20 +332,19 @@ function nextSibling (el, selector) {
   return el || null;
 }
 });
-require.register("matthewmueller-debounce/index.js", function(exports, require, module){
+require.register("component-debounce/index.js", function(exports, require, module){
 /**
  * Debounces a function by the given threshold.
  *
  * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
  * @param {Function} function to wrap
  * @param {Number} timeout in ms (`100`)
- * @param {Boolean} whether to execute at the beginning (`true`)
+ * @param {Boolean} whether to execute at the beginning (`false`)
  * @api public
  */
 
 module.exports = function debounce(func, threshold, execAsap){
   var timeout;
-  if (false !== execAsap) execAsap = true;
 
   return function debounced(){
     var obj = this, args = arguments;
@@ -1177,7 +1176,7 @@ require.register("component-event/index.js", function(exports, require, module){
 
 exports.bind = function(el, type, fn, capture){
   if (el.addEventListener) {
-    el.addEventListener(type, fn, capture);
+    el.addEventListener(type, fn, capture || false);
   } else {
     el.attachEvent('on' + type, fn);
   }
@@ -1197,7 +1196,7 @@ exports.bind = function(el, type, fn, capture){
 
 exports.unbind = function(el, type, fn, capture){
   if (el.removeEventListener) {
-    el.removeEventListener(type, fn, capture);
+    el.removeEventListener(type, fn, capture || false);
   } else {
     el.detachEvent('on' + type, fn);
   }
@@ -1790,6 +1789,7 @@ function Select(){
   this.dropdown = query('.select-dropdown', this.el);
   this.input = query('.select-input', this.el);
   this.inputEvents = events(this.input, this);
+  this.docEvents = events(document, this);
   this.events = events(this.el, this);
   this._selected = [];
   this.options = {};
@@ -1811,13 +1811,27 @@ Emitter(Select.prototype);
 
 Select.prototype.bind = function(){
   this.events.bind('click .select-box', 'focus');
-  this.events.bind('mousedown .select-option');
   this.events.bind('mouseover .select-option');
   var onsearch = this.onsearch.bind(this);
-  this.input.oninput = debounce(onsearch, 300);
+  this.input.onkeyup = debounce(onsearch, 300);
+  this.docEvents.bind('touchstart', 'blur');
   this.inputEvents.bind('focus', 'show');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
+  return this;
+};
+
+/**
+ * Unbind internal events.
+ *
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.unbind = function(){
+  this.inputEvents.unbind();
+  this.docEvents.unbind();
+  this.events.unbind();
   return this;
 };
 
@@ -1865,6 +1879,7 @@ Select.prototype.multiple = function(label, opts){
 
 Select.prototype.add = function(name, value){
   var opt = option.apply(null, arguments);
+  opt.el.onmousedown = this.select.bind(this, name);
   this.opts.appendChild(opt.el);
   this.options[opt.name] = opt;
   this.emit('add', opt);
@@ -2221,6 +2236,18 @@ Select.prototype.focus = function(){
 };
 
 /**
+ * Blur input.
+ *
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.blur = function(){
+  this.input.blur();
+  return this;
+};
+
+/**
  * Highlight next element.
  *
  * @api private
@@ -2306,18 +2333,6 @@ Select.prototype.onkeydown = function(e){
       this.deselect(item.name);
       break;
   }
-};
-
-/**
- * on-mousedown.
- *
- * @param {Event} e
- * @api private
- */
-
-Select.prototype.onmousedown = function(e){
-  var name = e.target.getAttribute('data-name');
-  this.select(name);
 };
 
 /**
@@ -2455,8 +2470,9 @@ require.alias("component-matches-selector/index.js", "yields-traverse/deps/match
 require.alias("component-query/index.js", "component-matches-selector/deps/query/index.js");
 
 require.alias("yields-traverse/index.js", "yields-traverse/index.js");
-require.alias("matthewmueller-debounce/index.js", "yields-select/deps/debounce/index.js");
-
+require.alias("component-debounce/index.js", "yields-select/deps/debounce/index.js");
+require.alias("component-debounce/index.js", "yields-select/deps/debounce/index.js");
+require.alias("component-debounce/index.js", "component-debounce/index.js");
 require.alias("component-pillbox/index.js", "yields-select/deps/pillbox/index.js");
 require.alias("component-events/index.js", "component-pillbox/deps/events/index.js");
 require.alias("component-event/index.js", "component-events/deps/event/index.js");
