@@ -418,6 +418,11 @@ Select.prototype.search = function(term){
     , self = this
     , found = 0;
 
+  // show
+  if (!this.visible()) {
+    this.show()
+  }
+
   // custom search
   this.emit('search', term, opts);
 
