@@ -42,12 +42,27 @@
       padding: 0 5px 0 0;
     }
 
-    .select .select-box {
+    /* Overrides select.css padding */
+    .select-single .select-box {
+      padding: 0;
+    }
+
+    .select-single input {
+      width: 100%;
+    }
+
+    .select-multiple .select-box {
       border-radius: 3px;
       padding: 5px;
     }
 
-    .select.open .select-box {
+    .select-single input {
+      border-radius: 3px;
+      padding: 9px;
+    }
+
+    .select-multiple.open .select-box,
+    .select-single.open input {
       border-radius: 3px 3px 0 0;
     }
 
@@ -70,7 +85,7 @@
       color: rgb(152, 218, 142);
     }
 
-    .select.open .select-box {
+    .select-multiple.open .select-box {
       border-bottom: 1px solid #eee;
     }
 
