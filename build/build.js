@@ -1816,6 +1816,7 @@ Select.prototype.bind = function(){
   this.input.onkeyup = debounce(onsearch, 300);
   this.docEvents.bind('touchstart', 'blur');
   this.inputEvents.bind('focus', 'show');
+  this.events.bind('touchstart');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
   return this;
@@ -2170,6 +2171,11 @@ Select.prototype.search = function(term){
     , self = this
     , found = 0;
 
+  // show
+  if (!this.visible()) {
+    this.show()
+  }
+
   // custom search
   this.emit('search', term, opts);
 
@@ -2390,6 +2396,17 @@ Select.prototype.showAll = function(){
   }
 
   return this;
+};
+
+/**
+ * on-touchstart.
+ *
+ * @param {Event} e
+ * @api public
+ */
+
+Select.prototype.ontouchstart = function(e){
+  e.stopImmediatePropagation();
 };
 
 /**
