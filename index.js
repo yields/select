@@ -151,8 +151,7 @@ Select.prototype.remove = function(name){
 
   // selected
   if (opt.selected) {
-    var i = this._selected.indexOf(opt);
-    this._selected.splice(i, 1);
+    this.deselect(opt.name);
   }
 
   delete this.options[name];
