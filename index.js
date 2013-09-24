@@ -64,6 +64,7 @@ Select.prototype.bind = function(){
   this.input.onkeyup = debounce(onsearch, 300);
   this.docEvents.bind('touchstart', 'blur');
   this.inputEvents.bind('focus', 'show');
+  this.events.bind('touchstart');
   this.inputEvents.bind('blur');
   this.events.bind('keydown');
   return this;
@@ -643,6 +644,17 @@ Select.prototype.showAll = function(){
   }
 
   return this;
+};
+
+/**
+ * on-touchstart.
+ *
+ * @param {Event} e
+ * @api public
+ */
+
+Select.prototype.ontouchstart = function(e){
+  e.stopImmediatePropagation();
 };
 
 /**
