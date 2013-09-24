@@ -3,12 +3,18 @@
 <head>
   <meta charset='utf8'>
   <title>select</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
   <link rel='stylesheet' href='build/build.css'>
   <script src='build/build.js'></script>
 
   <style>
+    * {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
     body {
-      padding: 50px;
+      padding: 20px;
       font-family: 'Helvetica Neue', 'Lucida Grande', sans-serif;
       font-size: 12px;
       font-weight: 300;
@@ -16,7 +22,8 @@
 
     .select {
       display: block;
-      width: 300px;
+      width: 400px;
+      max-width: 100%;
     }
 
     .pillbox li {
@@ -38,10 +45,6 @@
     .select .select-box {
       border-radius: 3px;
       padding: 5px;
-    }
-
-    .select .select-dropdown {
-      width: 310px;
     }
 
     .select.open .select-box {
