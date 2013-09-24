@@ -138,8 +138,8 @@
 
     [one, two].forEach(function(select){
       select.on('change', function(){
-        console.log('change: %o', select.el);
-        console.log('values: %o', select.values());
+        // console.log('change: %o', select.el);
+        // console.log('values: %o', select.values());
         values(select);
       });
     });
@@ -148,7 +148,8 @@
     .select('Google Go')
     .select('Javascript')
     .select('C')
-    .deselect('C');
+    .deselect('C')
+    .deselect('google go')
 
   </script>
 </body>

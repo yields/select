@@ -226,7 +226,7 @@ Select.prototype.deselect = function(name){
 
   // multiple
   if (this._multiple) {
-    this.box.remove(name);
+    this.box.remove(opt.label);
     var i = this._selected.indexOf(opt);
     if (!~i) return this;
     this._selected.splice(i, 1);
