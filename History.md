@@ -1,4 +1,15 @@
 
+0.4.0 / 2013-09-24
+==================
+
+ * add .empty() to remove all options, closes #28
+ * fix .remove(name) when option is selected
+ * fix .deselect(name) on multiple
+ * prevent propagation on touch start
+ * show dropdown on search, closes #32
+ * bubble .select(), should close #31
+ * Use component/debounce [jonathanong]
+
 0.3.0 / 2013-09-23
 ==================
 
