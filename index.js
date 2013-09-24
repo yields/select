@@ -160,6 +160,18 @@ Select.prototype.remove = function(name){
 };
 
 /**
+ * Remove all options.
+ *
+ * @return {Select}
+ * @api public
+ */
+
+Select.prototype.empty = function(){
+  each(this.options, this.remove.bind(this));
+  return this;
+};
+
+/**
  * Select `name`.
  *
  * @param {String} name

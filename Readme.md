@@ -72,6 +72,10 @@ select.on('change', function(){
 
   Remove an option with `name`.
 
+#### empty()
+
+  Remove all options.
+
 #### select(name)
 
   Select an option with `name`.
