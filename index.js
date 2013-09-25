@@ -111,6 +111,7 @@ Select.prototype.multiple = function(label, opts){
   if (this._multiple) return;
   this._multiple = true;
   this.classes.remove('select-single');
+  this.classes.add('select-multiple');
   this.box = new Pillbox(this.input, opts);
   this.box.events.unbind('keydown');
   this.box.on('remove', this.deselect.bind(this));
