@@ -547,6 +547,7 @@ Select.prototype.previous = function(){
  */
 
 Select.prototype.onsearch = function(e){
+  if (13 == e.which) return;
   if (e.target.value) {
     this.search(e.target.value);
   } else {
