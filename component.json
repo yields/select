@@ -14,7 +14,7 @@
     "ianstormtaylor/previous-sibling": "*",
     "ianstormtaylor/next-sibling": "*",
     "component/debounce": "*",
-    "component/pillbox": "*",
+    "component/pillbox": "1.2.1",
     "component/emitter": "*",
     "component/keyname": "*",
     "component/classes": "*",
