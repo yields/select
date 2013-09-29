@@ -1,4 +1,14 @@
 
+0.5.0 / 2013-09-29
+==================
+
+ * update pillbox
+ * dont search down, up or enter are down
+ * make .select-single input 100% width and 100% height [jonathanong]
+ * add .select-multiple class when multiple, closes #36
+ * ignore enter on search, closes #38
+ * meta viewport + border-box styling [jonathanong]
+
 0.4.0 / 2013-09-24
 ==================
 
