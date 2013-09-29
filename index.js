@@ -548,7 +548,15 @@ Select.prototype.previous = function(){
  */
 
 Select.prototype.onsearch = function(e){
-  if (13 == e.which) return;
+  var key = keyname(e.which);
+
+  // ignore
+  if ('down' == key) return;
+  if ('up' == key) return;
+  if ('enter' == key) return;
+
+  console.log('search');
+  // search
   if (e.target.value) {
     this.search(e.target.value);
   } else {
