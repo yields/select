@@ -554,8 +554,9 @@ Select.prototype.onsearch = function(e){
   if ('down' == key) return;
   if ('up' == key) return;
   if ('enter' == key) return;
+  if ('left' == key) return;
+  if ('right' == key) return;
 
-  console.log('search');
   // search
   if (e.target.value) {
     this.search(e.target.value);
