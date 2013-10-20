@@ -8,6 +8,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": ["index.js"],
+  "styles": ["index.css"],
   "templates": ["template.html"],
   "dependencies": {
     "ianstormtaylor/previous-sibling": "*",
