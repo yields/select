@@ -24,6 +24,47 @@
       display: block;
       width: 400px;
       max-width: 100%;
+      -webkit-user-select: none;
+      user-select: none;
+      min-width: 150px;
+      position: relative;
+    }
+
+    .select-option[disabled] {
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .select-input {
+      border: 0 none;
+    }
+
+    .select-box {
+      width: 100%;
+      border: 1px solid #ddd;
+      padding: 4px 0;
+    }
+
+    .select-option {
+      cursor: pointer;
+      display: block;
+      padding: 3px 4px;
+    }
+
+    .select-options {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .select-dropdown {
+      position: absolute;
+      width: 100%;
+      max-height: 200px;
+      background: #fff;
+      z-index: 1;
+      border: 1px solid #ddd;
+      border-top: 0 none;
     }
 
     .pillbox span {
@@ -36,15 +77,10 @@
       box-shadow: 0 1px 1px rgba(0, 0, 0, .03);
     }
 
-    .select span img {
+    .select img {
       width: 10px;
       height: 10px;
       padding: 0 5px 0 0;
-    }
-
-    /* Overrides select.css padding */
-    .select-single .select-box {
-      padding: 0;
     }
 
     .select-single input {
@@ -58,7 +94,7 @@
 
     .select-single input {
       border-radius: 3px;
-      padding: 9px;
+      padding: 4px;
     }
 
     .select-multiple.open .select-box,
