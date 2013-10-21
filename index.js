@@ -470,7 +470,7 @@ Select.prototype.search = function(term){
 Select.prototype.highlight = function(el){
   if ('string' == typeof el) el = this.get(el).el;
   this.dehighlight();
-  classes(el).add('highlight');
+  classes(el).add('highlighted');
   this.active = el;
   return this;
 };
@@ -484,7 +484,7 @@ Select.prototype.highlight = function(el){
 
 Select.prototype.dehighlight = function(){
   if (!this.active) return this;
-  classes(this.active).remove('highlight');
+  classes(this.active).remove('highlighted');
   this.active = null;
   return this;
 };

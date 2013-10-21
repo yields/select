@@ -323,7 +323,7 @@ describe('select()', function(){
     })
     it('should add `.highlight` to the option element', function(){
       var s = select().add('s').highlight('s');
-      assert(dom(s.active).hasClass('highlight'));
+      assert(dom(s.active).hasClass('highlighted'));
     })
   })
 
@@ -333,7 +333,7 @@ describe('select()', function(){
       var el = sel.active;
       assert(sel.active);
       sel.dehighlight();
-      assert(!dom(el).hasClass('highlight'));
+      assert(!dom(el).hasClass('highlighted'));
       assert(!sel.active);
     })
   })

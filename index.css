@@ -2,12 +2,12 @@
 /**
  * Select.
  *
- * div.select
+ * div.select(.open)
  *   div.select-box
  *     input.select-input[type=text]
  *   div.select-dropdown
  *     ul.select-options
- *       li.select-option
+ *       li.select-option(.selected)(.highlighted)([disabled])([hidden])
  *       ...
  */
 
@@ -17,32 +17,32 @@
   user-select: none;
 }
 
-.select .select-box {
+.select-box {
   width: 100%;
   cursor: pointer;
 }
 
-.select .select-dropdown {
+.select-dropdown {
   position: absolute;
   width: 100%;
   z-index: 1;
 }
 
-.select .select-options {
+.select-options {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-.select .select-option {
+.select-option {
   cursor: pointer;
   display: block;
 }
 
-.select .select-option[disabled] {
+.select-option[disabled] {
   pointer-events: none;
 }
 
-.select .selected {
+.select-option.selected {
   display: none;
 }
