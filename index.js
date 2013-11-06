@@ -1,4 +1,3 @@
-
 /**
  * dependencies
  */
@@ -573,9 +572,7 @@ Select.prototype.onsearch = function(e){
  */
 
 Select.prototype.onkeydown = function(e){
-  var multi = this._multiple
-    , visible = this.visible()
-    , active = this.active
+  var visible = this.visible()
     , box = this.box;
 
   // actions
