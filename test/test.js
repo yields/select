@@ -92,6 +92,14 @@ describe('select()', function(){
         var s = select().add('foo');
         assert('foo' == s.get('foo').value);
       })
+
+      it('should get an option with el which refers to actual DOM element', function(){
+        var s = select().add('foo');
+        var foo = s.get('foo');
+        foo.el.innerHTML = 'the foo';
+        assert('the foo' == s.opts.children[0].innerHTML);
+      })
+
     })
 
     describe('()', function(){
