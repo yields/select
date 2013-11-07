@@ -129,7 +129,7 @@ Select.prototype.multiple = function(label, opts){
 Select.prototype.add = function(name, value){
   var opt = option.apply(null, arguments);
   opt.el.onmousedown = this.select.bind(this, name);
-  this.opts.appendChild(opt.el);
+  opt.el = this.opts.appendChild(opt.el);
   this.options[opt.name] = opt;
   this.emit('add', opt);
   return this;
