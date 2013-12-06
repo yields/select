@@ -698,7 +698,9 @@ function option(obj, value, el){
   // option
   obj.label = obj.name;
   obj.name = obj.name.toLowerCase();
-  obj.value = obj.value || obj.name;
+  obj.value = obj.value == null 
+    ? obj.name
+    : obj.value;
 
   // element
   if (!obj.el) {
