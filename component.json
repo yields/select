@@ -3,7 +3,7 @@
   "repo": "yields/select",
   "description": "modern <select>.",
   "demo": "http://yields.github.io/select/index.html",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "keywords": ["select", "chosen", "select2"],
   "license": "MIT",
   "main": "index.js",
