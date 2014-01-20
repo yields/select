@@ -13,20 +13,24 @@
   "dependencies": {
     "ianstormtaylor/previous-sibling": "*",
     "ianstormtaylor/next-sibling": "*",
+    "component/bind": "*",
     "component/debounce": "*",
-    "component/pillbox": "*",
+    "dominicbarnes/pillbox": "ie8_compat",
     "component/emitter": "*",
     "component/keyname": "*",
     "component/classes": "*",
     "component/events": "*",
     "component/domify": "*",
     "component/query": "*",
-    "component/each": "*"
+    "component/query-zest": "*",
+    "component/each": "*",
+    "component/map": "*",
+    "component/indexof": "*"
   },
   "development": {
     "visionmedia/mocha-matrix": "*",
     "visionmedia/mocha": "*",
     "component/assert": "*",
-    "component/dom": "*"
+    "dominicbarnes/dom": "ie8_compat"
   }
 }

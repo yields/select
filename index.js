@@ -13,8 +13,14 @@ var keyname = require('keyname');
 var events = require('events');
 var domify = require('domify');
 var query = require('query');
+var bind = require('bind');
 var each = require('each');
+var map = require('map');
+var indexOf = require('indexof');
 var tpl = domify(template);
+
+require('query-zest');
+
 
 /**
  * Export `Select`
@@ -59,7 +65,7 @@ Emitter(Select.prototype);
 Select.prototype.bind = function(){
   this.events.bind('click .select-box', 'focus');
   this.events.bind('mouseover .select-option');
-  var onsearch = this.onsearch.bind(this);
+  var onsearch = bind(this, this.onsearch);
   this.input.onkeyup = debounce(onsearch, 300);
   this.docEvents.bind('touchstart', 'blur');
   this.inputEvents.bind('focus', 'show');
@@ -113,7 +119,7 @@ Select.prototype.multiple = function(label, opts){
   this.classes.add('select-multiple');
   this.box = new Pillbox(this.input, opts);
   this.box.events.unbind('keydown');
-  this.box.on('remove', this.deselect.bind(this));
+  this.box.on('remove', bind(this, this.deselect));
   return this;
 };
 
@@ -128,7 +134,7 @@ Select.prototype.multiple = function(label, opts){
 
 Select.prototype.add = function(name, value){
   var opt = option.apply(null, arguments);
-  opt.el.onmousedown = this.select.bind(this, name);
+  opt.el.onmousedown = bind(this, this.select, name);
   this.opts.appendChild(opt.el);
   this.options[opt.name] = opt;
   this.emit('add', opt);
@@ -167,7 +173,7 @@ Select.prototype.remove = function(name){
  */
 
 Select.prototype.empty = function(){
-  each(this.options, this.remove.bind(this));
+  each(this.options, bind(this, this.remove));
   return this;
 };
 
@@ -238,7 +244,7 @@ Select.prototype.deselect = function(name){
   // multiple
   if (this._multiple) {
     this.box.remove(opt.label);
-    var i = this._selected.indexOf(opt);
+    var i = indexOf(this._selected, opt);
     if (!~i) return this;
     this._selected.splice(i, 1);
     this.change();
@@ -396,7 +402,10 @@ Select.prototype.enable = function(name){
 
 Select.prototype.selected = function(arr){
   if (1 == arguments.length) {
-    arr.forEach(this.select, this);
+    var self = this;
+    each(arr, function (item) {
+      self.select(item);
+    });
     return this;
   }
 
@@ -411,7 +420,7 @@ Select.prototype.selected = function(arr){
  */
 
 Select.prototype.values = function(){
-  return this._selected.map(function(opt){
+  return map(this._selected, function(opt){
     return opt.value;
   });
 };
@@ -698,7 +707,7 @@ function option(obj, value, el){
   // option
   obj.label = obj.name;
   obj.name = obj.name.toLowerCase();
-  obj.value = obj.value == null 
+  obj.value = obj.value == null
     ? obj.name
     : obj.value;
 
