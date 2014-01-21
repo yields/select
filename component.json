@@ -25,7 +25,8 @@
     "component/query-zest": "*",
     "component/each": "*",
     "component/map": "*",
-    "component/indexof": "*"
+    "component/indexof": "*",
+    "stephenmathieson/normalize": "*"
   },
   "development": {
     "visionmedia/mocha-matrix": "*",

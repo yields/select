@@ -17,6 +17,7 @@ var bind = require('bind');
 var each = require('each');
 var map = require('map');
 var indexOf = require('indexof');
+var normalize = require("normalize");
 var tpl = domify(template);
 
 require('query-zest');
@@ -555,7 +556,7 @@ Select.prototype.previous = function(){
  * @api private
  */
 
-Select.prototype.onsearch = function(e){
+Select.prototype.onsearch = normalize(function(e){
   var key = keyname(e.which);
 
   // ignore
@@ -571,7 +572,7 @@ Select.prototype.onsearch = function(e){
   } else {
     this.showAll();
   }
-};
+});
 
 /**
  * on-keydown.
@@ -580,7 +581,7 @@ Select.prototype.onsearch = function(e){
  * @api private
  */
 
-Select.prototype.onkeydown = function(e){
+Select.prototype.onkeydown = normalize(function(e){
   var visible = this.visible()
     , box = this.box;
 
@@ -615,7 +616,7 @@ Select.prototype.onkeydown = function(e){
       this.deselect(item.name);
       break;
   }
-};
+});
 
 /**
  * on-mouseover
@@ -624,10 +625,10 @@ Select.prototype.onkeydown = function(e){
  * @api private
  */
 
-Select.prototype.onmouseover = function(e){
+Select.prototype.onmouseover = normalize(function(e){
   var name = e.target.getAttribute('data-name');
   this.highlight(name);
-};
+});
 
 /**
  * Emit change.
