@@ -18,6 +18,7 @@ var each = require('each');
 var map = require('map');
 var indexOf = require('indexof');
 var normalize = require("normalize");
+var text = require('text');
 var tpl = domify(template);
 
 require('query-zest');
@@ -715,7 +716,7 @@ function option(obj, value, el){
   // element
   if (!obj.el) {
     obj.el = document.createElement('li');
-    obj.el.textContent = obj.label;
+    text(obj.el, obj.label);
   }
 
   // domify

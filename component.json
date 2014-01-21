@@ -26,7 +26,8 @@
     "component/each": "*",
     "component/map": "*",
     "component/indexof": "*",
-    "stephenmathieson/normalize": "*"
+    "stephenmathieson/normalize": "*",
+    "matthewp/text": "*"
   },
   "development": {
     "visionmedia/mocha-matrix": "*",
