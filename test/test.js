@@ -28,7 +28,7 @@ describe('select()', function(){
     })
 
     it('should append the pillbox to `.select-box`', function(){
-      assert(dom('.pillbox', s.el).length());
+      assert(dom('.pillbox', s.el).length);
     })
   })
 
@@ -385,7 +385,7 @@ describe('select()', function(){
           .search('o')
           .opts;
 
-        assert(2 == dom('.select-option:not([hidden])', opts).length());
+        assert(2 == dom('.select-option:not([hidden])', opts).length);
       })
     })
 
@@ -398,7 +398,7 @@ describe('select()', function(){
         .search('o')
         .opts;
 
-      assert(3 == dom('.select-option:not([hidden])', opts).length());
+      assert(3 == dom('.select-option:not([hidden])', opts).length);
     })
   })
 })

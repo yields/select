@@ -15,7 +15,7 @@
     "ianstormtaylor/next-sibling": "*",
     "component/bind": "*",
     "component/debounce": "*",
-    "dominicbarnes/pillbox": "ie8_compat",
+    "component/pillbox": "*",
     "component/emitter": "*",
     "component/keyname": "*",
     "component/classes": "*",
@@ -33,6 +33,6 @@
     "visionmedia/mocha-matrix": "*",
     "visionmedia/mocha": "*",
     "component/assert": "*",
-    "dominicbarnes/dom": "ie8_compat"
+    "component/dom": "*"
   }
 }
