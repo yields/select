@@ -19,7 +19,7 @@ var select = Select()
   .add('C', 200)
   .select('Jasvascript')
   .select('Google Go')
-  .deselect('Google Go');
+  .deselect('Google Go')
   .select('c');
 
 document.body.appendChild(select.el);
