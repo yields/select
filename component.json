@@ -13,6 +13,7 @@
   "dependencies": {
     "ianstormtaylor/previous-sibling": "*",
     "ianstormtaylor/next-sibling": "*",
+    "component/bind": "*",
     "component/debounce": "*",
     "component/pillbox": "*",
     "component/emitter": "*",
@@ -21,7 +22,12 @@
     "component/events": "*",
     "component/domify": "*",
     "component/query": "*",
-    "component/each": "*"
+    "component/query-zest": "*",
+    "component/each": "*",
+    "component/map": "*",
+    "component/indexof": "*",
+    "stephenmathieson/normalize": "*",
+    "matthewp/text": "*"
   },
   "development": {
     "visionmedia/mocha-matrix": "*",
